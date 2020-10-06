@@ -1,0 +1,209 @@
+---
+title: "Intro R"
+author: "Tim Dennis"
+date: "10/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Episode data types 
+## download and read file in
+
+```{r}
+download.file("https://raw.githubusercontent.com/swcarpentry/r-novice-gapminder/gh-pages/_episodes_rmd/data/gapminder_data.csv", destfile = "data/gapminder_data.csv")
+gapminder <- read.csv("data/gapminder_data.csv")
+```
+
+## We can also read in file from web
+
+```{r}
+gapminder <- read.csv("https://raw.githubusercontent.com/swcarpentry/r-novice-gapminder/gh-pages/_episodes_rmd/data/gapminder_data.csv")
+
+```
+
+What do we have, we can run the `str()` function on any R object: 
+
+```{r}
+str(gapminder) #str stands for structure 
+```
+
+We can get it to open up in a tab in RStudio a couple of ways: 
+
+```{r}
+
+View(gapminder) #to look at it in a tab 
+
+```
+
+## Data types 
+
+R has a few data types it is good be aware of: 
+
+```{r}
+typeof(gapminder$year)
+typeof(gapminder$lifeExp)
+typeof(3.14)
+typeof(TRUE)  # logical 
+typeof('bannana')
+class(gapminder)
+typeof(gapminder$continent)
+typeof(gapminder$country) #character
+
+```
+
+
+```{r}
+typeof(gapminder$year)
+```
+
+## Vectors 
+
+TODO  - dunno what to do here yet
+
+<http://swcarpentry.github.io/r-novice-gapminder/04-data-structures-part1/index.html#vectors-and-type-coercion>
+
+## Data structures = realistic example 
+
+```{r}
+str(gapminder)
+summary(gapminder$country)
+```
+
+What happened here? 
+
+Let's look up some help? What should i Run? 
+
+```{r}
+?summary
+```
+
+```{r}
+summary(gapminder$country) # tell us lenght of character vector 
+
+```
+
+But we want a diff summary, we'd lke to count up the occurances of our country. To do this we need to convert the country vector to a factor. What's a factor? categorical variable, e.g. colors, breeds of dogs 
+
+```{r}
+factor(gapminder$country)
+```
+
+Note at the end, we can see 142 levels (or categories). Let's add this to our summary; how? 
+
+```{r}
+summary(factor(gapminder$country))
+```
+
+Now what if we want to permanently save `country` as a factor. We might not need to do this in in a real case b/c w can always do on the fly if needed, but we could need to do it so we can alter levels (they could be ordinal). 
+
+Let's add the factor version of `country` at the end of gapminder as a new column. How would you think we do that? 
+
+```{r}
+gapminder$countr_fac <- factor(gapminder$country)
+```
+
+```{r}
+str(gapminder)
+```
+
+Notice the difference. 
+
+Ok let's look at some helpful methods to inspect the data. 
+
+```{r}
+typeof(gapminder$year)
+typeof(gapminder$country)
+str(gapminder$country)
+str(gapminder$countr_fac)
+length(gapminder)
+typeof(gapminder)
+```
+
+* what's a list?? a data structure can be thought of as a container of many different types of objects. 
+* all dataframes in R under the hood are list.
+* but lists are important to be aware of b/c complex objects are lists
+* this can include how statistical models are represented or plots 
+
+Let's explore some other functions we can use to inspect dataframes: 
+
+```{r}
+nrow(gapminder)
+ncol(gapminder)
+dim(gapminder)
+colnames(gapminder)
+head(gapminder)
+```
+
+## Subsetting 
+
+What's a column in a data frame? 
+
+Right, it's a vector. Let's pull out a column as a vector by itself and explore how we subset vectors. 
+
+```{r}
+life_exp <- gapminder[['lifeExp']]
+```
+
+```{r}
+str(life_exp)
+```
+TODO - do some subsetting and show c()
+
+### Data frames 
+* Bracket notation - if we use a single bracket with number, it will return
+* Single column as a dataframe
+
+```{r}
+head(gapminder[3])
+```
+
+```{r}
+str(gapminder[3])
+```
+
+However if we use [[3]] it'll return the column as a vector 
+
+```{r}
+head(gapminder[[3]])
+head(gapminder[["lifeExp"]])
+```
+
+```{r}
+str(gapminder[[3]])
+```
+
+A vector. 
+
+`$` dollar sign can pull out a column by name. A lot easier to remember names than their numbers. 
+
+```{r}
+head(gapminder$year)
+
+```
+
+We can pull out by rows and columns by using two arguments in `[]`
+
+```{r}
+gapminder[1:3,] #row 1-3 and all columns
+gapminder[3,] #   
+gapminder[3:10, 1:3]
+```
+
+Let's subset gapminder and only include data from 87
+
+```{r eval=FALSE}
+gapminder[gapminder$year == 1987, ]
+```
+
+How about population greater than 15,000,000
+
+```{r eval=FALSE}
+gapminder[gapminder$pop >= 15000000,]
+
+```
+
+
+
